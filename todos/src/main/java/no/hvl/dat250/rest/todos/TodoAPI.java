@@ -22,6 +22,7 @@ public class TodoAPI {
     }
 
 
+
     public static void main(String[] args) {
         if (args.length > 0) {
             port(Integer.parseInt(args[0]));
@@ -42,6 +43,29 @@ public class TodoAPI {
             System.out.println(gson);
             return gson.toJson(todo.get());
         });
+
+        options("/*",
+                (request, response) -> {
+
+                    String accessControlRequestHeaders = request
+                            .headers("Access-Control-Request-Headers");
+                    if (accessControlRequestHeaders != null) {
+                        response.header("Access-Control-Allow-Headers",
+                                accessControlRequestHeaders);
+                    }
+
+                    String accessControlRequestMethod = request
+                            .headers("Access-Control-Request-Method");
+                    if (accessControlRequestMethod != null) {
+                        response.header("Access-Control-Allow-Methods",
+                                accessControlRequestMethod);
+                    }
+
+                    return "OK";
+                });
+
+
+
 
         get("/todos/:id", (request, response) -> {
             String in_Id = request.params(":id");
